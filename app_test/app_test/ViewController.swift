@@ -17,6 +17,7 @@ class ViewController: UIViewController {
 
     @IBOutlet var email_field: UITextField!
     @IBOutlet var password_field: UITextField!
+    @IBOutlet var result_field: UILabel!
     
     @IBAction func login_button(_ sender: Any) {
         let email = email_field.text!
@@ -37,6 +38,8 @@ class ViewController: UIViewController {
             switch response.result {
             case .success:
                 print("POST 성공")
+                self.result_field.text = "login 성공!"
+                
             case .failure(let error):
                 print("🚫 Alamofire Request Error\nCode:\(error._code), Message: \(error.errorDescription!)")
             }

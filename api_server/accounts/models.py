@@ -3,7 +3,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-
+## BaseUserModel : User를 생성할 때 사용하는 클래스
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -16,11 +16,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    ## User를 생성하는 함수
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
+    ## 관리자 User를 생성하는 함수
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -32,7 +34,7 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-
+## 상속받아 사용하는 클래스
 class User(AbstractBaseUser, PermissionsMixin):
     """
     customized User

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta #(이 부분은 상단에 위치)
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     # 아래부터 추가된 부분
     'rest_framework',
     'accounts',
+    # 'boards'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +81,7 @@ WSGI_APPLICATION = 'api_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+## 기존 db
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -84,6 +89,21 @@ DATABASES = {
     }
 }
 
+## 기존 db를 mysql db로 수정
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         # 'ENGINE': 'mysql.connector.django',
+#         'NAME': 'BASE_DIR',  # DB name
+#         'USER': 'root',  # DB account
+#         'PASSWORD': 'root1234', # DB account's password
+#         'HOST': '127.0.0.1',  # DB address(IP)
+#         'PORT': '3306',  # DB port(normally 3306)
+#         'OPTIONS': {
+#             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+#         }
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -115,7 +135,9 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+## True인 경우 templates와 forms에서만 위의 타임존 따름
+## False인 경우 models에서도 위의 타임존 따름 (모든 곳에서 동일한 타임존)
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -129,19 +151,25 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    ## DRF에서 제공하는 pagination을 사용 기 위한 설정
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    ## pagniation을 몇 개씩 보여줄지 설정
     'PAGE_SIZE': 10,
+    ## 기본 permisstions를 어떻게 줄 것인지 설정
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    ## Authentications을 어떻게 줄 것인지 설정(이 프로젝트에선느 기본적으로 IsAuthenticated 설정)
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
+    ## api결과를 어떤 형태로 전달하는가에 대한 설정. (설정 안 해주면 web형태로 나옴. 여기서는 json 형태로 전달)
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    ## 요청 받을 때 body형태에 대한 설정.
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
@@ -184,4 +212,5 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
+## 회원가입 api 생성
 AUTH_USER_MODEL = 'accounts.User'

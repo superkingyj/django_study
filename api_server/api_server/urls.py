@@ -21,5 +21,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 추가
-    path('users/', include('accounts.urls')),
+    path('users/', include('accounts.urls')), ## users와 관련된 url 요청은 accounts/urls.py 파일에서 관리
 ]
