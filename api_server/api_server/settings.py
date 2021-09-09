@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta #(이 부분은 상단에 위치)
 import pymysql
+import os
 
 pymysql.install_as_MySQLdb()
 
@@ -89,22 +90,6 @@ DATABASES = {
     }
 }
 
-## 기존 db를 mysql db로 수정
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         # 'ENGINE': 'mysql.connector.django',
-#         'NAME': 'BASE_DIR',  # DB name
-#         'USER': 'root',  # DB account
-#         'PASSWORD': 'root1234', # DB account's password
-#         'HOST': '127.0.0.1',  # DB address(IP)
-#         'PORT': '3306',  # DB port(normally 3306)
-#         'OPTIONS': {
-#             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
-#         }
-#     }
-# }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -144,6 +129,16 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'service_tattoo_images', 'static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+## 각 media file에 대한 url prefix₩
+MEDIA_URL = '/media/'
+## 미디어 파일을 관리한 루트 media 디렉터리
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

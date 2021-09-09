@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path
 # 추가
 from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 추가
     path('users/', include('accounts.urls')), ## users와 관련된 url 요청은 accounts/urls.py 파일에서 관리
-]
+    # path('image_service/', include('image_service.urls')) ## 이미지 서비스와 관련된 url 요청은 image_service/urls.py 파일에서 관리
+] + static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT) ## static 파일을 서비스 하는 경로를 지정,
